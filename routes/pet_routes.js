@@ -4,6 +4,8 @@ var fs = require('fs');
 var bodyparser = require('body-parser');
 
 module.exports = function(router) {
+  var tempObj = [];
+
   router.use(bodyparser.json());
 
   router.post('/pets/test', function(req, res) {
@@ -57,22 +59,41 @@ module.exports = function(router) {
     });//end read directory
   });//end GET
 
-  // router.get('/pets/all', function(req, res) {
-  //   var dir = './data/prod/';
-  //   fs.readdir(dir, function(err, files) {
-  //     files.forEach(function(file) {
-  //       fs.readFile(dir+file, 'utf-8', function(err, data) {
-  //         if(err) {
-  //           console.log(err);
-  //         }
-  //         var tempObj = {}
-  //         tempObj.file = JSON.parse(data.toString());
-  //         //console.log(JSON.parse(data.toString()));
-  //         res.send(tempObj);
-  //       });
-  //     });//end forEach
-  //   });
-  // });//view all file content
+  //this displays all content of files
+  router.get('/pets/all', function(req, res) {
+    var dir = './data/prod/';
+    
+    fs.readdir(dir, function(err, files) {
+      if(err) {
+        console.log(err);
+      } else {
+        var remaining = files.length;
+
+        if(remaining === 0) {
+          console.log('Done reading files.');
+        }
+
+        //for each file
+        for(var i = 0; i < files.length; i++) {
+          //read its contents
+          fs.readFile(dir+files[i], function(err, data) {
+            if(err) {
+              console.log(err);
+            } else {
+              tempObj.push(JSON.parse(data.toString()));
+              //console.log(tempObj);
+              console.log('Successfully read a file.');
+            }
+            remaining -= 1;
+            if(remaining === 0) {
+              res.send(tempObj);
+              console.log('Done reading files.');
+            }
+          });
+        }
+      }
+    });
+  });//view all file content
 
   router.put('/pets/:file', function(req, res) {
     var id = Math.floor(Math.random() * 100);
