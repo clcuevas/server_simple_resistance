@@ -18,7 +18,7 @@ module.exports = function(router) {
       'owner': req.body.owner,
       'weight': req.body.weight,
       'type': req.body.type
-    }
+    };
 
     fs.writeFile(filename, JSON.stringify(pet, null, 4), function(err) {
       if(err) {
@@ -38,7 +38,7 @@ module.exports = function(router) {
       'owner': req.body.owner,
       'weight': req.body.weight,
       'type': req.body.type
-    }
+    };
 
     fs.writeFile(filename, JSON.stringify(pet, null, 4), function(err) {
       if(err) {
@@ -104,7 +104,7 @@ module.exports = function(router) {
       'owner': req.body.owner,
       'weight': req.body.weight,
       'type': req.body.type
-    }
+    };
 
     fs.exists('./data/prod/' + req.params.file, function(exists) {
       if(exists) {
@@ -129,7 +129,7 @@ module.exports = function(router) {
       'owner': req.body.owner,
       'weight': req.body.weight,
       'type': req.body.type
-    }
+    };
     
     fs.exists('./data/prod/' + req.params.file, function(exists) {
       if(exists) {
