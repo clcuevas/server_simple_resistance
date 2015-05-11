@@ -16,7 +16,7 @@ module.exports = function(router) {
       'owner': req.body.owner,
       'weight': req.body.weight,
       'type': req.body.type
-    }
+    };
 
     fs.writeFile(filename, JSON.stringify(pet, null, 4), function(err) {
       if(err) {
@@ -36,7 +36,7 @@ module.exports = function(router) {
       'owner': req.body.owner,
       'weight': req.body.weight,
       'type': req.body.type
-    }
+    };
 
     fs.writeFile(filename, JSON.stringify(pet, null, 4), function(err) {
       if(err) {
@@ -66,7 +66,7 @@ module.exports = function(router) {
       'owner': req.body.owner,
       'weight': req.body.weight,
       'type': req.body.type
-    }
+    };
 
     fs.exists('./data/prod/' + req.params.file, function(exists) {
       if(exists) {
@@ -91,7 +91,7 @@ module.exports = function(router) {
       'owner': req.body.owner,
       'weight': req.body.weight,
       'type': req.body.type
-    }
+    };
     
     fs.exists('./data/prod/' + req.params.file, function(exists) {
       if(exists) {
@@ -128,7 +128,9 @@ module.exports = function(router) {
           tempObj.type = req.body.type;
 
           fs.writeFile('./data/prod/' + req.params.file, JSON.stringify(tempObj, null, 4), function(err) {
-            if(err) console.log(err);
+            if(err) {
+              console.log(err);
+            }
             res.json({msg: 'File has been updated'});
           });//end write to file
         });//end read file
