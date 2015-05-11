@@ -4,6 +4,8 @@ var fs = require('fs');
 var bodyparser = require('body-parser');
 
 module.exports = function(router) {
+  var tempObj = [];
+
   router.use(bodyparser.json());
 
   router.post('/pets/test', function(req, res) {
@@ -56,6 +58,42 @@ module.exports = function(router) {
       res.send(files);
     });//end read directory
   });//end GET
+
+  //this displays all content of files
+  router.get('/pets/all', function(req, res) {
+    var dir = './data/prod/';
+    
+    fs.readdir(dir, function(err, files) {
+      if(err) {
+        console.log(err);
+      } else {
+        var remaining = files.length;
+
+        if(remaining === 0) {
+          console.log('Done reading files.');
+        }
+
+        //for each file
+        for(var i = 0; i < files.length; i++) {
+          //read its contents
+          fs.readFile(dir+files[i], function(err, data) {
+            if(err) {
+              console.log(err);
+            } else {
+              tempObj.push(JSON.parse(data.toString()));
+              //console.log(tempObj);
+              console.log('Successfully read a file.');
+            }
+            remaining -= 1;
+            if(remaining === 0) {
+              res.send(tempObj);
+              console.log('Done reading files.');
+            }
+          });
+        }
+      }
+    });
+  });//view all file content
 
   router.put('/pets/:file', function(req, res) {
     var id = Math.floor(Math.random() * 100);
@@ -128,9 +166,7 @@ module.exports = function(router) {
           tempObj.type = req.body.type;
 
           fs.writeFile('./data/prod/' + req.params.file, JSON.stringify(tempObj, null, 4), function(err) {
-            if(err) {
-              console.log(err);
-            }
+            if(err) console.log(err);
             res.json({msg: 'File has been updated'});
           });//end write to file
         });//end read file
